@@ -1,27 +1,27 @@
 # SEISCOMP installtion to use (e.g. "/home/sysop/seiscomp3")
-SEISCOMP_ROOT=""
+SEISCOMP_ROOT="/opt/seiscomp3"
 
 # URL of the production machine
-HOST=""
+HOST="localhost"
 
 # Database connection (e.g. "user:pwd@db.machine.url/dbname")
-DBHOST=""
+DBHOST="mysql://sysop:sysop@localhost/seiscomp3"
 
 # Define database type and load necessary plugins to connect
 # to the database (e.g. "--plugins dbpostgresql -d postgresql://${DBHOST}"
-DBCONN=""
+DBCONN="-d ${DBHOST}"
 
 # Path to the SQL init file for sqlite3 (e.g. "${SEISCOMP_ROOT}/share/db/sqlite3.sql"
-SQLITEINIT=""
+SQLITEINIT="${SEISCOMP_ROOT}/share/db/sqlite3.sql"
 
 # The recordstream source URL, format: [service://]location[#type]
-RECORDURL=""
+RECORDURL="sdsarchive://${SEISCOMP_ROOT}/var/lib/archive"
 
 # Name of sqlite3 playback database
-PBDB=""
+PBDB="test.sqlite"
 
 # The playback data directory (e.g. "/home/sysop/playbacks/${HOST}")
-PLAYBACKDATA=""
+PLAYBACKDATA="${PWD}"
 
 # Path to station delays file (e.g."/home/sysop/station-delays.txt")
 DELAYTBL=""
