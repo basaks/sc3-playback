@@ -286,7 +286,8 @@ def run(wf, database, config_dir, fifo, speed=None, jump=None, delays=None,
 
     # construct msrtsimul command
     command = ["seiscomp", "exec", 
-	os.path.dirname(os.path.realpath(__file__))+"/msrtsimul.py"]
+    os.path.dirname(os.path.realpath(__file__))+"/msrtsimul.py"]
+
     if speed is not None:
         command += ["-s", speed]
     if jump is not None:
@@ -318,8 +319,8 @@ def run(wf, database, config_dir, fifo, speed=None, jump=None, delays=None,
             t0 -= datetime.timedelta(seconds=startupdelay)
             print "Start time %s" % t0
             # /usr/lib/faketime/libfaketime.so.1'
-            os.environ[
-                'LD_PRELOAD'] = '/usr/lib/x86_64-linux-gnu/faketime/libfaketime.so.1'
+            os.environ['LD_PRELOAD'] = \
+                '/usr/lib/x86_64-linux-gnu/faketime/libfaketime.so.1'
             ts = time.time()
             # Set system time in seconds relative to UTC now
             os.environ['FAKETIME'] = "%f" % (
@@ -330,21 +331,27 @@ def run(wf, database, config_dir, fifo, speed=None, jump=None, delays=None,
         start_module(mods.pop('kernel'))
         start_module(mods.pop('spread'))
         start_module(mods.pop('seedlink'))
-        start_module(mods.pop('scmaster'), '--start-stop-msg=1 --config %s' % scmaster_cfg)
+        start_module(mods.pop('scmaster'), '--start-stop-msg=1 --config %s'
+                     % scmaster_cfg)
         for _n, _m in mods.iteritems():
-		start_module(mods[_n],'--plugins dbsqlite3,evscore,dmvs,dmsm,locnll,mlh -d "sqlite3://%s"' % database)
-	# manual starts a module in debug interactive mode
-	#os.system('scfinder --trace --plugins dbsqlite3,dmvs,dmsm,mlh -d sqlite3://%s &> /home/sysop/.seiscomp3/log/scfinder.log &' % database)
-	#os.system('scm --plugins dbsqlite3,dmvs,dmsm,mlh -d "sqlite3://%s" &' % database)
-	#os.system('scmm --plugins dbsqlite3,dmvs,dmsm,mlh -d "sqlite3://%s" &' % database)
-        #os.system('scrttv --plugins dbsqlite3,dmvs,dmsm,mlh -d "sqlite3://%s" &' % database)
-        #os.system('scolv --plugins dbsqlite3,dmvs,dmsm,mlh -d "sqlite3://%s" &' % database)
+            start_module(mods[_n], '--plugins dbsqlite3,evscore,dmvs,dmsm,'
+                                   'locnll,mlh -d "sqlite3://%s"' % database)
 
-	command.append(wf)
-	system(command)
+        # manual starts a module in debug interactive mode
+        # os.system('scfinder --trace --plugins dbsqlite3,dmvs,dmsm,mlh -d
+        # sqlite3://%s &> /home/sysop/.seiscomp3/log/scfinder.log &' % database)
+        # os.system('scm --plugins dbsqlite3,dmvs,dmsm,mlh -d "sqlite3://%s"
+        # &' % database)
+        # os.system('scmm --plugins dbsqlite3,dmvs,dmsm,mlh -d "sqlite3://%s" &' % database)
+        # os.system('scrttv --plugins dbsqlite3,dmvs,dmsm,mlh -d
+        # "sqlite3://%s" &' % database)
+        # os.system('scolv --plugins dbsqlite3,dmvs,dmsm,mlh -d "sqlite3://%s" &' % database)
+
+        command.append(wf)
+        system(command)
         if eventfile is not None:
             system(dispatch_cmd)
-        system(['seiscomp', 'stop'])
+            system(['seiscomp', 'stop'])
     except KeyboardInterrupt:
         if eventfile is not None:
             system(dispatch_cmd)
